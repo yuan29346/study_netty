@@ -46,7 +46,7 @@ public class TimerClient {
 //		}
 //		socket= null;
 		
-		new Thread(new TimerClientHandler("127.0.0.1", port),"TimerClient-001").start();
+		new Thread(new TimerClientHandler("localhost", port),"TimerClient-001").start();
 	}
 
 }

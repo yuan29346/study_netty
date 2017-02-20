@@ -23,9 +23,7 @@ public class TimerClientHandler implements Runnable {
 		try {
 			this.selector = Selector.open();
 			this.socketChannle = SocketChannel.open();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) { 
 			e.printStackTrace();
 		}
 		
@@ -41,11 +39,14 @@ public class TimerClientHandler implements Runnable {
 		
 		while(!stop){
 			try {
+			
 				selector.select(1000);
 				Set<SelectionKey> selectKeys = selector.selectedKeys();
 				Iterator<SelectionKey> it = selectKeys.iterator();
 				SelectionKey key = null;
+				System.out.println("selectKeys=="+selectKeys.size());
 				while(it.hasNext()){
+					System.out.println("22222222222");
 					key = it.next();
 					it.remove();
 					try{
@@ -75,8 +76,10 @@ public class TimerClientHandler implements Runnable {
 	}
 	
 	private void handleInput(SelectionKey key) throws IOException{
+		System.out.println("key"+key.isReadable());
 		if(key.isValid()){
 			SocketChannel sc = (SocketChannel) key.channel();
+			sc.configureBlocking(false);
 			if(key.isConnectable()){
 				if(sc.finishConnect()){
 					sc.register(selector, SelectionKey.OP_READ);
@@ -107,8 +110,10 @@ public class TimerClientHandler implements Runnable {
 	}
 	
 	private void doConnect() throws IOException{
+		System.out.println(host+"  "+port);
 		if(socketChannle.connect(new InetSocketAddress(host,port))){
-			socketChannle.register(selector, SelectionKey.OP_READ);
+			System.out.println(socketChannle.isBlocking()+"  "+socketChannle.isRegistered()+" "+socketChannle.isConnected());
+//			socketChannle.register(selector, SelectionKey.OP_READ);
 			doWrite(socketChannle);
 		}else{
 			socketChannle.register(selector, SelectionKey.OP_CONNECT);

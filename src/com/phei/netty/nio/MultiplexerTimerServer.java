@@ -79,17 +79,20 @@ public class MultiplexerTimerServer implements Runnable{
 	
 	private void handleInput(SelectionKey key) throws IOException{
 		if(key.isValid()){
+			System.out.println("Acceptable="+key.isAcceptable()+"  Readable="+key.isReadable());
 			if(key.isAcceptable()){
 				ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
 				SocketChannel sc = ssc.accept();
 				sc.configureBlocking(false);
 				sc.register(selector, SelectionKey.OP_READ);
-			}
-			
-			if(key.isReadable()){
+				
+			}else if(key.isReadable()){
+				System.out.println("isReadable@@@@@@@@@@ ");
 				SocketChannel sc = (SocketChannel) key.channel();
 				ByteBuffer readBuffer = ByteBuffer.allocate(1024);
+				//读取服务器发送的数据
 				int readBytes = sc.read(readBuffer);
+				System.out.println("readBytes="+readBytes);
 				if(readBytes>0){
 					readBuffer.flip();
 					byte[] bytes = new byte[readBuffer.remaining()];

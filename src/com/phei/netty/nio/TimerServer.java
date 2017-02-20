@@ -1,6 +1,6 @@
 package com.phei.netty.nio;
 
-public class TimeServer {
+public class TimerServer {
 
 	public static void main(String[] args) {
 	 

@@ -112,8 +112,8 @@ public class TimerClientHandler implements Runnable {
 	private void doConnect() throws IOException{
 		System.out.println(host+"  "+port);
 		if(socketChannle.connect(new InetSocketAddress(host,port))){
-			System.out.println(socketChannle.isBlocking()+"  "+socketChannle.isRegistered()+" "+socketChannle.isConnected());
-//			socketChannle.register(selector, SelectionKey.OP_READ);
+			System.out.println(socketChannle.isBlocking()+"  "+socketChannle.finishConnect()+" "+socketChannle.isConnected());
+			socketChannle.register(selector, SelectionKey.OP_READ);
 			doWrite(socketChannle);
 		}else{
 			socketChannle.register(selector, SelectionKey.OP_CONNECT);
